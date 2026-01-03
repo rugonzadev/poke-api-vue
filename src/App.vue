@@ -4,19 +4,25 @@ import { ref } from 'vue';
 import HeaderNav from './components/HeaderNav.vue';
 import CardComponent from './components/CardComponent.vue';
 
+//reactive variables
 let pokemonName = ref("")
 let pokemonList = ref([])
 
+//main API fetch function
 async function findPoke() {
     const url = "https://pokeapi.co/api/v2/pokemon/"
+    //multyple forms pokemon only appear in pokemon-species endpoint
     const urlFallBack = "https://pokeapi.co/api/v2/pokemon-species/"
     try{
+        //fetch pokemon from standart endpoint
         let response = await fetch(url+pokemonName.value.toLowerCase().trim());
         let myData = await response.json();
+        //wrap single pokemon in an array for uniform display
         let poke =[]
         poke.push(myData)
         pokemonList.value.push(poke);
     }catch (error){
+        //if not found fetch from species enpoint to get multyple forms
         let response1 = await fetch(urlFallBack + pokemonName.value.toLowerCase().trim());
         let myData1 = await response1.json();
 
@@ -27,12 +33,13 @@ async function findPoke() {
             const myData2 = await response2.json();
             poke.push(myData2);
         }
-
+        //store as array of forms for uniform display
         pokemonList.value.push(poke);
         
     }
 }
 
+//reset function
 function resetPoke(){
     pokemonList.value = []
 }
@@ -40,15 +47,18 @@ function resetPoke(){
 </script> 
 
 <template>
+    <!--Header component-->
     <HeaderNav></HeaderNav>
     <fieldset>
         <label for="pokemonName">Pokemon Name</label>
         <input type="text" id="pokemonName" v-model.lazy="pokemonName" placeholder="write here the Pokemon name">
+        <!--Buttons to search and reset the Pokémon list -->
         <button @click="findPoke" id="search">Search!</button>
         <button @click="resetPoke" id="reset">Reset!</button>
     </fieldset>
     
     <div id="gallery">
+        <!--render a card for each pokemon in the list-->
         <CardComponent v-for="(p, index) in pokemonList" :key="index" :pokemon="p"/>
     </div>
 </template>

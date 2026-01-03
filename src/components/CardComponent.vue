@@ -1,11 +1,14 @@
 <script setup>
 import { ref } from 'vue'
 
+//copy pokemon props for editable version
 const props = defineProps({
     pokemon: Array
 })
 
-// Hacemos una copia reactiva
+//reactive local state
+//currentImg: image to display (normal or shiny)
+//nameCapitalized: Pokemon name with first letter capitalized
 const localPokemon = ref(
     props.pokemon.map(f => ({
     ...f, 
@@ -14,19 +17,21 @@ const localPokemon = ref(
     }))
 )
 
-// Función para cambiar a shiny
+//shiny mouse enter
 function shiny(f) {
     f.currentImg = f.sprites.front_shiny
 }
 
-// Función para volver a normal
+//normal mouse out
 function normal(f) {
     f.currentImg = f.sprites.front_default
 }
 </script>
 
 <template>
+    <!--card container for Pokémon forms-->
     <div class="card">
+        <!--render each form with hover effect-->
         <div v-for="(f, index) in localPokemon" :key="index" @mouseenter="shiny(f)" @mouseleave="normal(f)">
             <img :src="f.currentImg" :alt="f.name" />
             <span>{{ f.nameCapitalized }}</span>
