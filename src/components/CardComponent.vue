@@ -8,12 +8,10 @@ const props = defineProps({
 
 //reactive local state
 //currentImg: image to display (normal or shiny)
-//nameCapitalized: Pokemon name with first letter capitalized
 const localPokemon = ref(
     props.pokemon.map(f => ({
     ...f, 
     currentImg: f.sprites.front_default,
-    nameCapitalized: f.name.charAt(0).toUpperCase()+ f.name.slice(1)
     }))
 )
 
@@ -34,7 +32,7 @@ function normal(f) {
         <!--render each form with hover effect-->
         <div v-for="(f, index) in localPokemon" :key="index" @mouseenter="shiny(f)" @mouseleave="normal(f)">
             <img :src="f.currentImg" :alt="f.name" />
-            <span>{{ f.nameCapitalized }}</span>
+            <span>{{ f.name }}</span>
         </div>
     </div>
 </template>
@@ -61,6 +59,10 @@ function normal(f) {
 
 .card div:hover img{
     transform: scale(1.2);
+}
+
+span{
+    text-transform: capitalize;
 }
 
 </style>

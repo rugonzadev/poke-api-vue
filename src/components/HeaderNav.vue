@@ -1,15 +1,25 @@
-<script setup>
-
-</script>
+<script setup></script>
 
 <template>
-    <header>
+    <header class="header">
         <h1>PokeApi</h1>
-        <ul>
-            <li>Search</li>
-            <li>History</li>
-            <li>My Team</li>
-        </ul>
+        <nav>
+            <ul>
+                <!--using vue-router-->
+                <li>
+                    <RouterLink to="/" class="link">Search</RouterLink>
+                </li>
+
+                <li>
+                    <RouterLink to="/history" class="link">History</RouterLink>
+                </li>
+
+                <li>
+                    <RouterLink to="/team" class="link">My Team</RouterLink>
+                </li>
+                
+            </ul>
+        </nav>
     </header>
 </template>
 
@@ -40,5 +50,9 @@
     header ul li:hover{
         background-color: crimson;
         box-shadow: 0 0 3px black;
+    }
+
+    .link{
+        color: white;
     }
 </style>
