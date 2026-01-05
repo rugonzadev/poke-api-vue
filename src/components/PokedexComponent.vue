@@ -15,7 +15,7 @@ defineProps({
         </div>
 
         <div class="description">
-            <p>{{ pokemon[0].name }}</p>
+            <p>{{ pokemon[0].flavor_text_entries[1].flavor_text }}</p>
         </div>
 
         <h3>Abilities:</h3>
@@ -26,7 +26,7 @@ defineProps({
         </div>
 
         <div class="forms" v-for="(f, index) in pokemon" :key="index">
-        <h3>Form: {{ f.name }}</h3>
+        <h3>Form: {{ f.forms[0].name }}</h3>
         <div class="sprites">
             <img :src="f.sprites.front_default" alt="Front" />
             <img :src="f.sprites.back_default" alt="Back" />

@@ -17,20 +17,36 @@ export const usePokeHistory = defineStore("pokeHistory", ()=>{
             //fetch pokemon from standart endpoint
             let response = await fetch(url+pokemonName.toLowerCase().trim());
             let myData = await response.json();
+            
+            //fetch pokemon from species endpoint to get more data
+            let response1 = await fetch(urlFallBack + pokemonName.toLowerCase().trim());
+            let myData1 = await response1.json();
+
             //wrap single pokemon in an array for uniform display
             poke.push(myData)
+            poke = poke.map(p => ({
+            ...p, 
+            ...myData1
+            }))
+
             pokemonList.value.push(poke);
             return poke;
         }catch (error){
             //if not found fetch from species enpoint to get multyple forms
-            let response1 = await fetch(urlFallBack + pokemonName.toLowerCase().trim());
-            let myData1 = await response1.json();
+            let response2 = await fetch(urlFallBack + pokemonName.toLowerCase().trim());
+            let myData2 = await response2.json();
 
-            for (let form of myData1.varieties) {
-                const response2 = await fetch(form.pokemon.url);
-                const myData2 = await response2.json();
-                poke.push(myData2);
+            for (let form of myData2.varieties) {
+                const response3 = await fetch(form.pokemon.url);
+                const myData3 = await response3.json();
+                poke.push(myData3);
+
+                poke = poke.map(p => ({
+                ...p, 
+                ...myData2
+                }))
             }
+            console.log(poke)
             //store as array of forms for uniform display
             pokemonList.value.push(poke);
             return poke;
