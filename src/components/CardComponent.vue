@@ -27,12 +27,11 @@ function normal(f) {
 </script>
 
 <template>
-    <!--card container for Pokémon forms-->
-    <div class="card">
-        <!--render each form with hover effect-->
-        <div v-for="(f, index) in localPokemon" :key="index" @mouseenter="shiny(f)" @mouseleave="normal(f)">
-            <img :src="f.currentImg" :alt="f.name" />
-            <span>{{ f.name }}</span>
+    <!--just display basic form of pokemon, simple render-->
+    <div class="card" v-if="localPokemon.length">
+        <div @mouseenter="shiny(localPokemon[0])" @mouseleave="normal(localPokemon[0])">
+            <img v-if="localPokemon[0].currentImg" :src="localPokemon[0].currentImg"/>
+            <span>{{ localPokemon[0].name }}</span>
         </div>
     </div>
 </template>

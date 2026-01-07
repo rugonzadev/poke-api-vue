@@ -1,43 +1,75 @@
 <script setup>
-import { useTeamStore } from '../stores/teamStore';
-defineProps({
-    pokemon: Array
+import { useTeamStore } from '../stores/teamStore'
+import { computed } from 'vue'
+
+const props = defineProps({
+  pokemon: Array
 })
 
-const teamStore = useTeamStore();
+const teamStore = useTeamStore()
 
+//find only english description
+const englishDescription = computed(() => {
+  return props.pokemon?.[0].flavor_text_entries.find(d => d.language.name === 'en').flavor_text
+})
 </script>
+
 
 <template>
     <!--render one pokemon data like a pokedex-->
     <div v-if="pokemon && pokemon.length > 0" class="pokedex-card">
         <button @click="teamStore.saveTeam(pokemon)">Add {{ pokemon[0].name }} to my Team</button>
         <h2 class="pokemon-name">{{ pokemon[0].name }}</h2>
+        <!--render types-->
+        <div class="types">
+        <span v-for="(t, index) in pokemon[0].types" :key="index" class="type">
+            {{ t.type.name }}
+        </span>
+        </div>
 
         <div class="main-sprite">
         <img :src="pokemon[0].sprites.front_default" :alt="pokemon[0].name" />
         </div>
 
-        <div class="description">
-            <p>{{ pokemon[0].flavor_text_entries[0].flavor_text }}</p>
-        </div>
+        <h3>{{ pokemon[0].generation.name }} </h3>
+        <!--render english description -->
+        <p class="description">
+            {{ englishDescription }}
+        </p>
+
+        <!--render cry-->
+        <audio
+            :src= "pokemon[0].cries.latest"
+            controls
+        ></audio>
 
         <h3>Abilities:</h3>
+        <!--render abilities-->
         <div class="abilities">
         <span v-for="(a, index) in pokemon[0].abilities" :key="index" class="ability">
             {{ a.ability.name }}
         </span>
         </div>
 
+        <h3>Base stats:</h3>
+        <!--render stats-->
+            <div class="stats">
+                <p v-for="(s, index) in pokemon[0].stats" :key="index" class="stat">
+                    {{ s.stat.name }} : {{ s.base_stat }}
+                </p>
+            </div>       
+
         <!--fix: some poke forms have no data-->
         <div class="forms" v-for="(f, index) in pokemon" :key="index">
             <h3 v-if="f.forms.length>0">Form: {{ f.forms[0].name }}</h3>
             <div class="sprites">
-                <img :src="f.sprites.front_default" alt="Front" />
-                <img :src="f.sprites.back_default" alt="Back" />
-                <img :src="f.sprites.front_shiny" alt="Front Shiny" />
-                <img :src="f.sprites.back_shiny" alt="Back Shiny" />
+                <!--only render if sprite exists-->
+                <img v-if="f.sprites.front_default" :src="f.sprites.front_default" alt="Front" />
+                <img v-if="f.sprites.back_default" :src="f.sprites.back_default" alt="Back" />
+                <img v-if="f.sprites.front_shiny" :src="f.sprites.front_shiny" alt="Front Shiny" />
+                <img v-if="f.sprites.back_shiny" :src="f.sprites.back_shiny" alt="Back Shiny" />
             </div>
+
         </div>
     </div>
 </template>
@@ -65,6 +97,22 @@ const teamStore = useTeamStore();
     width: 150px;
     height: 150px;
     }
+
+.types {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 10px 0;
+}
+
+.type {
+    background-color: #000000;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 8px;
+    text-transform: capitalize;
+}
 
 .abilities {
     display: flex;

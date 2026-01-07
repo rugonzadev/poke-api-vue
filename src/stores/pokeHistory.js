@@ -17,6 +17,14 @@ export const usePokeHistory = defineStore("pokeHistory", ()=>{
             //fetch pokemon from standart endpoint
             let response = await fetch(url+pokemonName.toLowerCase().trim());
             let myData = await response.json();
+
+            //adding all different forms that appear in other endpoints (mega-evolution, regional forms...)
+            for (const variety of myData.varieties) {
+                let responseInfo = await fetch(variety.url)
+                let info = await responseInfo.json()
+                console.log(info)
+                variety.push(...info)
+            }
             
             //fetch pokemon from species endpoint to get more data
             let response1 = await fetch(urlFallBack + pokemonName.toLowerCase().trim());
