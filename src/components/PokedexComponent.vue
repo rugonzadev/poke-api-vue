@@ -1,13 +1,17 @@
 <script setup>
+import { useTeamStore } from '../stores/teamStore';
 defineProps({
     pokemon: Array
 })
+
+const teamStore = useTeamStore();
 
 </script>
 
 <template>
     <!--render one pokemon data like a pokedex-->
     <div v-if="pokemon && pokemon.length > 0" class="pokedex-card">
+        <button @click="teamStore.saveTeam(pokemon)">Add {{ pokemon[0].name }} to my Team</button>
         <h2 class="pokemon-name">{{ pokemon[0].name }}</h2>
 
         <div class="main-sprite">
@@ -15,7 +19,7 @@ defineProps({
         </div>
 
         <div class="description">
-            <p>{{ pokemon[0].flavor_text_entries[1].flavor_text }}</p>
+            <p>{{ pokemon[0].flavor_text_entries[0].flavor_text }}</p>
         </div>
 
         <h3>Abilities:</h3>
@@ -25,14 +29,15 @@ defineProps({
         </span>
         </div>
 
+        <!--fix: some poke forms have no data-->
         <div class="forms" v-for="(f, index) in pokemon" :key="index">
-        <h3>Form: {{ f.forms[0].name }}</h3>
-        <div class="sprites">
-            <img :src="f.sprites.front_default" alt="Front" />
-            <img :src="f.sprites.back_default" alt="Back" />
-            <img :src="f.sprites.front_shiny" alt="Front Shiny" />
-            <img :src="f.sprites.back_shiny" alt="Back Shiny" />
-        </div>
+            <h3 v-if="f.forms.length>0">Form: {{ f.forms[0].name }}</h3>
+            <div class="sprites">
+                <img :src="f.sprites.front_default" alt="Front" />
+                <img :src="f.sprites.back_default" alt="Back" />
+                <img :src="f.sprites.front_shiny" alt="Front Shiny" />
+                <img :src="f.sprites.back_shiny" alt="Back Shiny" />
+            </div>
         </div>
     </div>
 </template>

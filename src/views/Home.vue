@@ -1,6 +1,6 @@
 <script setup>
     //Composition API
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import HeaderNav from '../components/HeaderNav.vue';
 import { usePokeHistory } from '../stores/pokeHistory';
 import PokedexComponent from '../components/PokedexComponent.vue';
@@ -14,6 +14,11 @@ async function search(){
     poke.value = await pokeStore.findPoke(pokemonName.value);
     console.log(poke.value)
 }
+
+//persistance, last poke searched
+onMounted(()=>{
+    poke.value = pokeStore.pokemonList[pokeStore.pokemonList.length-1];
+})
 
 </script> 
 
