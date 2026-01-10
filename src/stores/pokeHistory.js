@@ -22,7 +22,6 @@ export const usePokeHistory = defineStore("pokeHistory", ()=>{
             for (const variety of myData.varieties) {
                 let responseInfo = await fetch(variety.url)
                 let info = await responseInfo.json()
-                console.log(info)
                 variety.push(...info)
             }
             
@@ -54,7 +53,6 @@ export const usePokeHistory = defineStore("pokeHistory", ()=>{
                 ...myData2
                 }))
             }
-            console.log(poke)
             //store as array of forms for uniform display
             pokemonList.value.push(poke);
             return poke;

@@ -12,7 +12,6 @@ const pokeStore = usePokeHistory();
 
 async function search(){
     poke.value = await pokeStore.findPoke(pokemonName.value);
-    console.log(poke.value)
 }
 
 //persistance, last poke searched

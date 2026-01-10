@@ -10,7 +10,7 @@ const teamStore = useTeamStore()
 
 //find only english description
 const englishDescription = computed(() => {
-  return props.pokemon?.[0].flavor_text_entries.find(d => d.language.name === 'en').flavor_text
+  return props.pokemon[0].flavor_text_entries.find(d => d.language.name === 'en').flavor_text
 })
 </script>
 
