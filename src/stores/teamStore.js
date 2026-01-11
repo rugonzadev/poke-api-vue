@@ -11,6 +11,7 @@ export const useTeamStore = defineStore("teamStore", ()=>{
         if(team.value.length == 6){
             team.value.shift()
         }
+        console.log(poke)
         team.value.push(poke)
     }
 
@@ -18,12 +19,13 @@ export const useTeamStore = defineStore("teamStore", ()=>{
     function evalTeam(){
         warnings.value = []
         warnings.value.push(evalSize());
-        warnings.value.push(evalTypes());
+        if(team.value.length > 0) warnings.value.push(evalTypes());
+        evalStats();
     }
 
     //warning: pokemon size < 6
     function evalSize(){
-        if (team.value.length < 6) return`Your team's size is ${team.value.length}/6`
+        return`Your team's size is ${team.value.length}/6`
     }
 
     //warning: repeated pokemon types
@@ -31,11 +33,10 @@ export const useTeamStore = defineStore("teamStore", ()=>{
         const teamTypes = new Set()
         const repeatedTypes = new Set()
 
-        team.value.forEach(pokemonForms => {
+        team.value.forEach(pokemon => {
             const localTypes = new Set()
 
-            pokemonForms.forEach(form => {
-            form.types.forEach(t => {
+            pokemon.types.forEach(t => {
                 const typeName = t.type.name
 
                 if (teamTypes.has(typeName)) {
@@ -44,11 +45,22 @@ export const useTeamStore = defineStore("teamStore", ()=>{
 
                 localTypes.add(typeName)
             })
-            })
+            
 
             localTypes.forEach(t => teamTypes.add(t))
         })
-        if(repeatedTypes.size > 0) return `Warning: your team has repeated types -> ${[...repeatedTypes]}`
+        if(repeatedTypes.size > 0){
+            return `Warning: your team has repeated types -> ${[...repeatedTypes]}`
+        } else{
+            return `Your team types are balanced -> ${[...teamTypes]}`
+        }
+    }
+
+    //warning: team stats
+    function evalStats(){
+        team.value.forEach(p=>{
+            console.log(p)
+        })
     }
 
 

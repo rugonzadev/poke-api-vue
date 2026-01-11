@@ -1,4 +1,7 @@
-<script setup></script>
+<script setup>
+    import { useTeamStore } from '../stores/teamStore';
+    const teamStore = useTeamStore();
+</script>
 
 <template>
     <header class="header">
@@ -15,7 +18,7 @@
                 </li>
 
                 <li>
-                    <RouterLink to="/team" class="link">My Team</RouterLink>
+                    <RouterLink to="/team" class="link">My Team ({{ teamStore.team.length }})</RouterLink>
                 </li>
                 
             </ul>

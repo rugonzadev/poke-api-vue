@@ -9,6 +9,7 @@ export const usePokeHistory = defineStore("pokeHistory", ()=>{
 
     //main API fetch function
     async function findPoke(pokemonName) {
+        console.log(pokemonName)
         const url = "https://pokeapi.co/api/v2/pokemon/"
         //multyple forms pokemon only appear in pokemon-species endpoint
         const urlFallBack = "https://pokeapi.co/api/v2/pokemon-species/"
@@ -17,11 +18,13 @@ export const usePokeHistory = defineStore("pokeHistory", ()=>{
             //fetch pokemon from standart endpoint
             let response = await fetch(url+pokemonName.toLowerCase().trim());
             let myData = await response.json();
+            console.log(myData)
 
             //adding all different forms that appear in other endpoints (mega-evolution, regional forms...)
             for (const variety of myData.varieties) {
                 let responseInfo = await fetch(variety.url)
                 let info = await responseInfo.json()
+                console.log(info)
                 variety.push(...info)
             }
             
@@ -35,7 +38,7 @@ export const usePokeHistory = defineStore("pokeHistory", ()=>{
             ...p, 
             ...myData1
             }))
-
+            console.log(poke)
             pokemonList.value.push(poke);
             return poke;
         }catch (error){

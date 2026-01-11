@@ -18,15 +18,14 @@ const englishDescription = computed(() => {
 <template>
     <!--render one pokemon data like a pokedex-->
     <div v-if="pokemon && pokemon.length > 0" class="pokedex-card">
-        <button @click="teamStore.saveTeam(pokemon)">Add {{ pokemon[0].name }} to my Team</button>
+        
         <h2 class="pokemon-name">{{ pokemon[0].name }}</h2>
         <!--render types-->
         <div class="types">
-        <span v-for="(t, index) in pokemon[0].types" :key="index" class="type">
-            {{ t.type.name }}
-        </span>
+            <span v-for="(t, index) in pokemon[0].types" :key="index" class="type">
+                {{ t.type.name }}
+            </span>
         </div>
-
         <div class="main-sprite">
         <img :src="pokemon[0].sprites.front_default" :alt="pokemon[0].name" />
         </div>
@@ -41,26 +40,11 @@ const englishDescription = computed(() => {
         <audio
             :src= "pokemon[0].cries.latest"
             controls
-        ></audio>
-
-        <h3>Abilities:</h3>
-        <!--render abilities-->
-        <div class="abilities">
-        <span v-for="(a, index) in pokemon[0].abilities" :key="index" class="ability">
-            {{ a.ability.name }}
-        </span>
-        </div>
-
-        <h3>Base stats:</h3>
-        <!--render stats-->
-            <div class="stats">
-                <p v-for="(s, index) in pokemon[0].stats" :key="index" class="stat">
-                    {{ s.stat.name }} : {{ s.base_stat }}
-                </p>
-            </div>       
+        ></audio>     
 
         <!--fix: some poke forms have no data-->
-        <div class="forms" v-for="(f, index) in pokemon" :key="index">
+        <div class="forms" v-for="(f, index) in pokemon.filter(f=>f.forms.length>0)" :key="index">
+            <button @click="teamStore.saveTeam(f)">Add {{ f.forms[0].name }} to my Team</button>
             <h3 v-if="f.forms.length>0">Form: {{ f.forms[0].name }}</h3>
             <div class="sprites">
                 <!--only render if sprite exists-->
@@ -69,7 +53,27 @@ const englishDescription = computed(() => {
                 <img v-if="f.sprites.front_shiny" :src="f.sprites.front_shiny" alt="Front Shiny" />
                 <img v-if="f.sprites.back_shiny" :src="f.sprites.back_shiny" alt="Back Shiny" />
             </div>
+            <div class="types">
+                <span v-for="(t, index) in f.types" :key="index" class="type">
+                    {{ t.type.name }}
+                </span>
+            </div>
 
+            <h3>Abilities:</h3>
+            <!--render abilities-->
+            <div class="abilities">
+                <span v-for="(a, index) in f.abilities" :key="index" class="ability">
+                    {{ a.ability.name }}
+                </span>
+            </div>
+
+            <h3>Stats:</h3>
+            <!--render stats-->
+            <div class="stats">
+                <p v-for="(s, index) in f.stats" :key="index" class="stat">
+                    {{ s.stat.name }} : {{ s.base_stat }}
+                </p>
+            </div>  
         </div>
     </div>
 </template>
